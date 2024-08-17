@@ -20,26 +20,26 @@ export function processSongsFile(fileContent: string): SongData[] {
     // Split by lines
     const lines = section.split('\n').map(line => line.trim()).filter(line => line.length > 0);
 
-    // Find the index of 'Y:' which indicates the end of the current song
-    const yIndex = lines.findIndex(line => line.startsWith('Y:'));
-    if (yIndex === -1) {
-      throw new Error('No YouTube link found.');
-    }
+// Extract the title, lyrics, translations, and YouTube link
+const title = lines.shift() || ''; // First line is the title
+const youtubeLink = lines.find(line => line.startsWith('Y:'))?.replace('Y:', '').trim() || 'Coming soon!';
 
-    // Extract the title, lyrics, translations, and YouTube link
-    const title = lines.shift() || ''; // First line is the title
-    const lyricsLines = lines.slice(0, yIndex).join('\n').trim();
-    const youtubeLink = lines[yIndex].replace('Y: ', '').trim();
-    const translationLines = lines.slice(yIndex + 1).join('\n').trim();
+// Remove the YouTube line if it exists
+const contentLines = lines.filter(line => !line.startsWith('Y:'));
 
-    // Split stanzas
-    const splitStanzas = (text: string): string[][] => {
-      return text.split('\n\n').map(stanza => stanza.trim().split('\n'));
-    };
+// Split content into lyrics and translation
+const splitIndex = contentLines.findIndex(line => line.startsWith('T:'));
+const lyricsLines = contentLines.slice(0, splitIndex).join('\n').trim();
+const translationLines = contentLines.slice(splitIndex + 1).join('\n').trim() || 'Translation: Coming soon';
 
-    // Extract lyrics and translations
-    const lyrics = splitStanzas(lyricsLines);
-    const translation = translationLines ? splitStanzas(translationLines) : [];
+// Split stanzas
+const splitStanzas = (text: string): string[][] => {
+  return text === 'Translation: Coming soon' ? [['Translation: Coming soon']] : text.split('\n\n').map(stanza => stanza.trim().split('\n'));
+};
+
+// Extract lyrics and translations
+const lyrics = splitStanzas(lyricsLines);
+const translation = splitStanzas(translationLines);
 
     return {
       title,
@@ -56,5 +56,5 @@ export function processSongsFile(fileContent: string): SongData[] {
 }
 
 // Example usage
-const songsData = processSongsFile('songs.txt');
-console.log(JSON.stringify(songsData, null, 2));
+// const songsData = processSongsFile('songs.txt');
+// console.log(JSON.stringify(songsData, null, 2));

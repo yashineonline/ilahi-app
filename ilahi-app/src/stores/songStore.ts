@@ -7,7 +7,7 @@ export const useSongStore = defineStore('song', () => {
 
   async function fetchSongs() {
     try {
-      const response = await fetch('https://raw.githubusercontent.com/yashineonline/ilahi-app/main/ilahi.txt')
+      const response = await fetch('https://github.com/yashineonline/ilahi/tree/ilahiApp-patch-1')
       const fileContent = await response.text()
       songs.value = processSongsFile(fileContent)
     } catch (error) {

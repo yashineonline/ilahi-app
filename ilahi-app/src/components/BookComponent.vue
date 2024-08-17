@@ -17,7 +17,7 @@ export default defineComponent({
     async downloadBook() {
       try {
         // Fetch all songs data
-        const response = await fetch('https://raw.githubusercontent.com/yashineonline/ilahi/main/ilahi.txt');
+        const response = await fetch('https://github.com/yashineonline/ilahi/tree/ilahiApp-patch-1');
         const rawContent = await response.text();
         const songsData: SongData[] = processSongsFile(rawContent);
 

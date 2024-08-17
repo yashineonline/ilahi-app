@@ -4,11 +4,18 @@
     <p v-html="formattedLyrics"></p>
     <p v-html="formattedTranslation"></p>
     <a :href="youtubeLink" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
-    <button @click="generatePDF" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 mt-4">
+    <button
+      @click="generatePDF"
+      class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 mt-4"
+    >
       Generate PDF for this song
     </button>
     <div class="flex justify-center">
-      <canvas id="qrcodeCanvas" class="border border-gray-300"></canvas>
+      <canvas
+        id="qrcodeCanvas"
+        class="border border-gray-300"
+        style="width: 200px; height: 200px"
+      ></canvas>
     </div>
   </div>
 </template>
@@ -29,6 +36,7 @@ const formattedLyrics = computed(() => lyrics.value.replace(/\n/g, '<br>'));
 const formattedTranslation = computed(() => translation.value.replace(/\n/g, '<br>'));
 
 const generateQRCode = () => {
+  console.log('Generating QR code...');
   const canvas = document.getElementById('qrcodeCanvas') as HTMLCanvasElement;
   if (canvas) {
     QRCode.toCanvas(canvas, youtubeLink.value, { width: 200, margin: 2 }, (error) => {
@@ -78,12 +86,13 @@ const generatePDF = () => {
 
 const loadSongData = async () => {
   try {
-    const response = await fetch('https://raw.githubusercontent.com/yashineonline/ilahi/main/ilahi.txt');
+    const response = await fetch('https://github.com/yashineonline/ilahi/tree/ilahiApp-patch-1');
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const rawContent = await response.text();
     const songsData: SongData[] = processSongsFile(rawContent);
+    console.log('Fetched song data:', songsData);
     if (songsData.length > 0) {
       const song = songsData[0];
       title.value = song.title;
@@ -101,6 +110,7 @@ const loadSongData = async () => {
 };
 
 onMounted(() => {
+  console.log('Component mounted');
   loadSongData();
 });
 </script>

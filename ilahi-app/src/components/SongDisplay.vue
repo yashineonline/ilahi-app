@@ -11,19 +11,17 @@
       <div class="buttons mt-4 flex justify-center space-x-4">
         <button class="btn btn-primary" @click="showTranslation">Show Translation</button>
         <button class="btn btn-secondary" @click="openYoutubeLink">Watch on YouTube</button>
-        <button class="btn btn-accent" @click="generatePDF">Generate PDF</button>
-        <button class="btn btn-success" @click="downloadBook">Download PDF Book</button>
+        <button class="btn btn-accent" @click="generateSingleSongPDF">Generate PDF</button>
       </div>
     </div>
     <div v-else>Loading song...</div>
   </div>
 </template>
-  
+
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useSongStore } from '../stores/songStore'
-import { jsPDF } from 'jspdf'
-import { downloadBook } from './BookComponent.vue'
+import { generateSingleSongPDF as generatePDF } from '../utils/pdfGenerator'
 
 const songStore = useSongStore()
 const currentSong = computed(() => songStore.songs[0])
@@ -39,20 +37,9 @@ const openYoutubeLink = () => {
   }
 }
 
-const generatePDF = () => {
+const generateSingleSongPDF = () => {
   if (currentSong.value) {
-    const doc = new jsPDF()
-    doc.setFontSize(16)
-    doc.text(currentSong.value.title, 20, 20)
-    doc.setFontSize(12)
-    currentSong.value.lyrics.forEach((stanza, index) => {
-      doc.text(stanza.join('\n'), 20, 40 + (index * 30))
-    })
-    doc.save(`${currentSong.value.title}.pdf`)
+    generatePDF(currentSong.value)
   }
 }
-
-const downloadBook = BookComponent.setup().downloadBook
-
 </script>
-  

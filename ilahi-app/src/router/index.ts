@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import SongList from '../components/SongList.vue'
-import SongPlayer from '../components/SongPlayer.vue'
+import SongDisplay from '../components/SongDisplay.vue'
 import TestView from '../views/TestView.vue'
 import BookView from '../views/BookView.vue'
 
@@ -28,8 +28,8 @@ const routes = [
   },
   {
     path: '/player/:id',
-    name: 'SongPlayer',
-    component: SongPlayer
+    name: 'SongDisplay',
+    component: SongDisplay
   }
 ]
 

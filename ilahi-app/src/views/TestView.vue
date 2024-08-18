@@ -86,7 +86,7 @@ const generatePDF = () => {
 
 const loadSongData = async () => {
   try {
-    const response = await fetch('https://github.com/yashineonline/ilahi/tree/ilahiApp-patch-1');
+    const response = await fetch('http://localhost:3000/read-song');
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

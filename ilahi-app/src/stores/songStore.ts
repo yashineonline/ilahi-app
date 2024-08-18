@@ -12,10 +12,12 @@ export const useSongStore = defineStore('song', () => {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       const fileContent = await response.text()
-      songs.value = processSongsFile(fileContent)
+      const cleanContent = fileContent.replace(/^.*?```([\s\S]*?)```.*?$/m, '$1').trim();
+      songs.value = processSongsFile(cleanContent);
+      
     } catch (error) {
-      console.error('Error loading songs:', error)
-      songs.value = []
+      console.error('Error loading songs:', error);
+      songs.value = [];
     }
   }
 

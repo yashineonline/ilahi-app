@@ -11,12 +11,11 @@ import { defineComponent } from 'vue';
 import jsPDF from 'jspdf';
 import { processSongsFile, SongData } from '../utils/songProcessor';
 
-export default defineComponent({
+export const BookComponent = defineComponent({ 
   name: 'BookComponent',
-  methods: {
-    async downloadBook() {
+  setup() {
+    const downloadBook = async () => {
       try {
-        // Fetch all songs data
         const response = await fetch('http://localhost:3000/read-song');
         const rawContent = await response.text();
         const songsData: SongData[] = processSongsFile(rawContent);
@@ -51,7 +50,12 @@ export default defineComponent({
       } catch (error) {
         console.error('Error generating PDF:', error);
       }
-    }
+    };
+
+    return { downloadBook };
   }
 });
+
+export const downloadBook = BookComponent.setup().downloadBook;
+
 </script>
